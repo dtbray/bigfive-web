@@ -20,19 +20,24 @@ Only answer from evidence you actually have about me. If you are unsure, choose 
 
 Return JSON in this shape:
 {
+  "resultUrl": "https://blog.thomas-bray.com/bigfive-web/en/result/#answers=333...",
   "answers": [
     { "number": 1, "choice": "Neither Accurate Nor Inaccurate" }
   ],
   "commentary": "Briefly explain the results in the context of our co-work."
 }
 
-If you can run code, score the answers using the question choice scores in the JSON. If not, return the completed answers and summarize the likely Big Five profile.`;
+Build resultUrl by appending one score digit for each answer, in question order, to:
+https://blog.thomas-bray.com/bigfive-web/en/result/#answers=
+
+Use each selected choice's numeric score from the test input JSON. The finished URL should have exactly 120 digits after #answers=. If you can run code, score the answers using the question choice scores in the JSON. If not, return the completed answers and summarize the likely Big Five profile.`;
 
 const agentInstructions = [
   'Use the machine-readable JSON: https://blog.thomas-bray.com/bigfive-web/big-five-agent-input.json.',
   'Return one allowed choice label for every numbered question.',
+  'Prefer returning a resultUrl with #answers= followed by 120 score digits from the selected choices.',
   'If code execution is available, compute scores from the choice scores in the JSON.',
-  'The returned JSON can be pasted into the result page to generate a local result.',
+  'The returned JSON can still be pasted into the result page as a fallback.',
   'If using the web form instead, open https://blog.thomas-bray.com/bigfive-web/en/test/.',
   'Answer each visible question by selecting one of the radio options.',
   'When every question is answered, press See Results.'

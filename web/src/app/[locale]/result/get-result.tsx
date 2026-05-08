@@ -28,6 +28,7 @@ type AgentResultPayload = {
 };
 
 const questions = getItems('en');
+const compactAnswerLength = questions.length;
 
 export const GetResultPage = ({
   viewPreviousText,
@@ -53,6 +54,20 @@ export const GetResultPage = ({
     }
   }, []);
 
+  useEffect(() => {
+    const hash = new URLSearchParams(window.location.hash.slice(1));
+    const compactAnswers = hash.get('answers');
+    if (!compactAnswers) return;
+
+    const answers = buildAnswersFromCompactScores(compactAnswers);
+    if (typeof answers === 'string') {
+      setAgentJsonError(answers);
+      return;
+    }
+
+    saveAnswersAndOpenResult(answers);
+  }, []);
+
   const handleGetResults = () => {
     if (!formatAndValidateId(id)) return;
     router.push(`/result?id=${formatId(id)}`);
@@ -69,34 +84,38 @@ export const GetResultPage = ({
       return;
     }
 
-    if (!Array.isArray(parsed.answers)) {
-      setAgentJsonError('Expected JSON with an answers array.');
+    const answers = buildAnswersFromAgentPayload(parsed);
+    if (typeof answers === 'string') {
+      setAgentJsonError(answers);
       return;
+    }
+
+    saveAnswersAndOpenResult(answers);
+  };
+
+  const buildAnswersFromAgentPayload = (parsed: AgentResultPayload) => {
+    if (!Array.isArray(parsed.answers)) {
+      return 'Expected JSON with an answers array.';
     }
 
     if (parsed.answers.length !== questions.length) {
-      setAgentJsonError(`Expected ${questions.length} answers.`);
-      return;
+      return `Expected ${questions.length} answers.`;
     }
 
-    const answers: Answer[] = [];
+    const mappedAnswers: Answer[] = [];
 
     for (const answer of parsed.answers) {
       const question = questions[answer.number - 1];
       if (!question) {
-        setAgentJsonError(`Question ${answer.number} is out of range.`);
-        return;
+        return `Question ${answer.number} is out of range.`;
       }
 
       const choice = question.choices.find((c) => c.text === answer.choice);
       if (!choice) {
-        setAgentJsonError(
-          `Question ${answer.number} has an invalid choice: ${answer.choice}`
-        );
-        return;
+        return `Question ${answer.number} has an invalid choice: ${answer.choice}`;
       }
 
-      answers.push({
+      mappedAnswers.push({
         id: question.id,
         score: choice.score,
         domain: question.domain,
@@ -104,6 +123,28 @@ export const GetResultPage = ({
       });
     }
 
+    return mappedAnswers;
+  };
+
+  const buildAnswersFromCompactScores = (compactScores: string) => {
+    const scores = compactScores.trim();
+    if (!new RegExp(`^[1-5]{${compactAnswerLength}}$`).test(scores)) {
+      return `Expected #answers= followed by ${compactAnswerLength} digits from 1 to 5.`;
+    }
+
+    return questions.map((question, index) => {
+      const score = Number(scores[index]);
+
+      return {
+        id: question.id,
+        score,
+        domain: question.domain,
+        facet: question.facet
+      };
+    });
+  };
+
+  const saveAnswersAndOpenResult = (answers: Answer[]) => {
     const resultId = generateLocalResultId();
     const storedResults = JSON.parse(localStorage.getItem('b5results') || '{}');
     localStorage.setItem(
