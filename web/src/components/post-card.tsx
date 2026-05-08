@@ -1,35 +1,27 @@
-import { Card, CardFooter, CardBody } from '@nextui-org/card';
-import { Avatar } from '@nextui-org/avatar';
-import { Image } from '@nextui-org/image';
 import { format, parseISO } from 'date-fns';
 import { Post } from 'contentlayer/generated';
-import { Link } from '@/navigation';
+import Link from 'next/link';
 import { calculateReadingTime } from '@/lib/helpers';
 
 export function PostCard(post: Post) {
   return (
-    <Link href={post.url}>
-      <Card
-        isBlurred
-        className='p-2 h-full border-transparent text-start bg-white/5 dark:bg-default-400/10 backdrop-blur-lg backdrop-saturate-[1.8]'
-        isPressable={!!post.url}
-      >
-        <CardBody className='pt-0 px-2 pb-1'>
-          <Image
-            className='mb-4 object-cover'
+    <Link href={post.url} className='block h-full'>
+      <article className='h-full rounded-lg border border-transparent bg-white/5 p-4 text-start backdrop-blur-lg backdrop-saturate-[1.8] transition-colors hover:border-default-200 dark:bg-default-400/10'>
+        {post.image ? (
+          <img
+            className='mb-4 aspect-square w-full rounded-md object-cover'
             src={post.image}
             alt={post.description}
             height={400}
             width={400}
           />
-          <div className='absolute inset-0'></div>
-          <h3 className='z-10 mt-3 text-3xl font-bold'>{post.title}</h3>
-          <p className='font-normal w-full text-default-600'>
-            {post.description}
-          </p>
-        </CardBody>
-        <CardFooter className='flex justify-between items-center'>
-          <div className='flex text-small text-default-500 gap-x-5'>
+        ) : null}
+        <h3 className='mt-3 text-3xl font-bold'>{post.title}</h3>
+        <p className='w-full font-normal text-default-600'>
+          {post.description}
+        </p>
+        <footer className='mt-4 flex items-center justify-between gap-4'>
+          <div className='flex flex-wrap gap-x-5 gap-y-1 text-small text-default-500'>
             <time
               className='block'
               dateTime={post.date}
@@ -39,9 +31,15 @@ export function PostCard(post: Post) {
             </time>
             <p>{calculateReadingTime(post.body.raw)} min read</p>
           </div>
-          <Avatar size='sm' src={post.author?.avatar} />
-        </CardFooter>
-      </Card>
+          {post.author?.avatar ? (
+            <img
+              alt=''
+              className='h-8 w-8 shrink-0 rounded-full object-cover'
+              src={post.author.avatar}
+            />
+          ) : null}
+        </footer>
+      </article>
     </Link>
   );
 }

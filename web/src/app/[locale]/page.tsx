@@ -1,8 +1,4 @@
-import { useTranslations } from 'next-intl';
-import { Link } from '@nextui-org/link';
-import { button as buttonStyles } from '@nextui-org/theme';
 import { title, subtitle } from '@/components/primitives';
-import clsx from 'clsx';
 import { FeaturesGrid } from '@/components/features-grid';
 import {
   ExperimentIcon,
@@ -18,20 +14,19 @@ import { compareDesc } from 'date-fns';
 import { allPosts } from 'contentlayer/generated';
 import { PostCard } from '@/components/post-card';
 import { SonarPulse } from '@/components/sonar-pulse';
-import { Button } from '@nextui-org/button';
-import { unstable_setRequestLocale } from 'next-intl/server';
-import { Chip, Tooltip } from '@nextui-org/react';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import NextLink from 'next/link';
 import { Translated } from '@/components/translated';
 
 interface Props {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
-export default function Home({ params: { locale } }: Props) {
-  unstable_setRequestLocale(locale);
-  const t = useTranslations('frontpage');
-  const f = useTranslations('facets');
+export default async function Home({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations('frontpage');
+  const f = await getTranslations('facets');
   const testPath = `${basePath}/${locale}/test/`;
   const articlesPath = `${basePath}/${locale}/articles/`;
 
@@ -92,35 +87,19 @@ export default function Home({ params: { locale } }: Props) {
             <div className='flex flex-col md:flex-row items-center gap-4 justify-center'>
               <a
                 href={testPath}
-                className={clsx(
-                  buttonStyles({
-                    color: 'primary',
-                    radius: 'full',
-                    variant: 'shadow',
-                    size: 'lg',
-                    fullWidth: true
-                  }),
-                  'md:w-auto'
-                )}
+                className='inline-flex w-full items-center justify-center gap-2 rounded-full bg-primary px-6 py-3 text-base font-medium text-white shadow-lg transition-opacity hover:opacity-90 md:w-auto'
               >
                 {t('call_to_action')} <ArrowRightIcon />
               </a>
-              <Link
-                isExternal
-                className={clsx(
-                  buttonStyles({
-                    variant: 'bordered',
-                    radius: 'full',
-                    size: 'lg',
-                    fullWidth: true
-                  }),
-                  'md:w-auto'
-                )}
+              <a
+                className='inline-flex w-full items-center justify-center gap-2 rounded-full border border-default-300 px-6 py-3 text-base font-medium transition-colors hover:bg-default-100 md:w-auto'
                 href={siteConfig.links.github}
+                target='_blank'
+                rel='noreferrer'
               >
                 <GithubIcon size={20} />
                 GitHub
-              </Link>
+              </a>
             </div>
           </div>
 
@@ -154,27 +133,16 @@ export default function Home({ params: { locale } }: Props) {
         <SonarPulse
           color='#7928CA'
           icon={
-            <Tooltip
-              showArrow
-              color='secondary'
-              content={t('call_to_action')}
-              offset={10}
-              radius='full'
+            <a
+              aria-label={t('call_to_action')}
+              className='z-50 flex h-[70px] w-[70px] items-center justify-center rounded-full bg-gradient-to-b from-[#FF1CF7] to-[#7928CA]'
+              href={testPath}
             >
-              <Button
-                isIconOnly
-                aria-label={t('call_to_action')}
-                className='z-50 w-auto h-auto bg-gradient-to-b from-[#FF1CF7] to-[#7928CA]'
-                radius='full'
-                as='a'
-                href={testPath}
-              >
-                <PlusLinearIcon
-                  className='flex items-center justify-center rounded-full text-white'
-                  size={54}
-                />
-              </Button>
-            </Tooltip>
+              <PlusLinearIcon
+                className='flex items-center justify-center rounded-full text-white'
+                size={54}
+              />
+            </a>
           }
         >
           <div
@@ -206,33 +174,23 @@ export default function Home({ params: { locale } }: Props) {
               { name: f('neuroticism.title'), href: '/articles/neuroticism' }
             ]).map((e, idx) => (
               <div key={idx}>
-                <Button
+                <NextLink
                   key={idx}
-                  name={e.name}
                   style={e.style}
-                  className='absolute hidden md:inline-flex hover:bg-secondary'
-                  variant='bordered'
-                  as={Link}
+                  className='absolute hidden rounded-full border border-default-300 px-4 py-2 text-sm hover:bg-secondary md:inline-flex'
                   href={e.href}
                   aria-label={e.name}
                 >
                   {e.name}
-                </Button>
-                <Chip
-                  size='sm'
-                  color='secondary'
-                  variant='shadow'
+                </NextLink>
+                <NextLink
                   aria-label={e.name}
-                  classNames={{
-                    base: 'absolute md:hidden rounded-full left-[85px]',
-                    content: 'drop-shadow shadow-black text-white w-full w-36'
-                  }}
+                  className='absolute left-[85px] w-36 rounded-full bg-secondary px-3 py-1 text-center text-xs text-white shadow-black drop-shadow md:hidden'
                   style={e.smallStyle}
-                  as={Link}
                   href={e.href}
                 >
                   {e.name}
-                </Chip>
+                </NextLink>
               </div>
             ))}
           </div>
@@ -240,9 +198,9 @@ export default function Home({ params: { locale } }: Props) {
       </div>
 
       <div className='text-center mx-2'>
-        <Link href={articlesPath} color='foreground'>
+        <NextLink href={articlesPath} className='text-foreground'>
           <h1 className={title()}>Latest posts</h1>
-        </Link>
+        </NextLink>
         <h2 className={subtitle({ class: 'mt-4' })}>
           All the latest and greatest news and articles on #personality
         </h2>
@@ -252,16 +210,12 @@ export default function Home({ params: { locale } }: Props) {
           ))}
         </div>
         <div className='mt-10'>
-          <Link
-            isBlock
-            as={NextLink}
-            className='mb-8 -ml-3 text-default-500 hover:text-default-900 text-lg'
-            color='foreground'
+          <NextLink
+            className='mb-8 -ml-3 block text-lg text-default-500 hover:text-default-900'
             href={articlesPath}
-            size='md'
           >
             Show all articles ...
-          </Link>
+          </NextLink>
         </div>
       </div>
 

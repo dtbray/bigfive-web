@@ -1,23 +1,22 @@
-import { Avatar } from '@nextui-org/react';
 import { title } from '@/components/primitives';
 import { languages, Language } from '@/config/site';
 
 export const Translated = () => {
   const CountryAvatar = ({ lang }: { lang: Language }) =>
     lang.countryCode ? (
-      <Avatar
+      <img
         alt={lang.name}
-        className='w-12 h-12'
+        className='h-12 w-12 rounded-full object-cover'
         aria-label={lang.name}
         src={`/flags/${lang.countryCode}.svg`}
       />
     ) : (
-      <Avatar
-        alt={lang.name}
+      <span
         aria-label={lang.name}
-        className='w-12 h-12'
-        name={lang.code.toUpperCase()}
-      />
+        className='flex h-12 w-12 items-center justify-center rounded-full bg-default-200 text-sm font-semibold text-default-700'
+      >
+        {lang.code.toUpperCase()}
+      </span>
     );
   return (
     <section className='border-t border-b border-divider px-8 mt-10 text-center'>

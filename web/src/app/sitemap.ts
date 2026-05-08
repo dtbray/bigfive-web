@@ -2,6 +2,8 @@ import { MetadataRoute } from 'next';
 import { basePath, locales } from '@/config/site';
 import { getInfo } from '@bigfive-org/results';
 
+export const dynamic = 'force-static';
+
 const articles = [
   'agreeableness',
   'conscientiousness',

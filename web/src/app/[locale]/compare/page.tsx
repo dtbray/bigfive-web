@@ -1,15 +1,15 @@
 import { title } from '@/components/primitives';
-import { useTranslations } from 'next-intl';
-import { unstable_setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import { Alert } from '@/components/alert';
 
 interface Props {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
-export default function ComparePage({ params: { locale } }: Props) {
-  unstable_setRequestLocale(locale);
-  const t = useTranslations('getCompare');
+export default async function ComparePage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
+  const t = await getTranslations('getCompare');
   return (
     <div className='h-[calc(60vh)]'>
       <h1 className={title()}>{t('title')}</h1>

@@ -2,9 +2,6 @@ import { format, parseISO } from 'date-fns';
 import { allPosts } from 'contentlayer/generated';
 import { ChevronRightLinearIcon } from '@/components/icons';
 import NextLink from 'next/link';
-import { User } from '@nextui-org/user';
-import { Link } from '@nextui-org/react';
-import { Image } from '@nextui-org/image';
 import { calculateReadingTime } from '@/lib/helpers';
 import { ViewCounter } from '@/components/view-counter';
 import { Suspense } from 'react';
@@ -12,55 +9,64 @@ import { Suspense } from 'react';
 export const generateStaticParams = async () =>
   allPosts.map((post) => ({ slug: post._raw.flattenedPath }));
 
-export const generateMetadata = ({ params }: { params: { slug: string } }) => {
-  const post = allPosts.find((post) => post._raw.flattenedPath === params.slug);
-  if (!post) throw new Error(`Post not found for slug: ${params.slug}`);
+export const generateMetadata = async ({
+  params
+}: {
+  params: Promise<{ slug: string }>;
+}) => {
+  const { slug } = await params;
+  const post = allPosts.find((post) => post._raw.flattenedPath === slug);
+  if (!post) throw new Error(`Post not found for slug: ${slug}`);
   return { title: post.title };
 };
 
-const PostLayout = async ({ params }: { params: { slug: string } }) => {
-  const post = allPosts.find((post) => post._raw.flattenedPath === params.slug);
-  if (!post) throw new Error(`Post not found for slug: ${params.slug}`);
+const PostLayout = async ({
+  params
+}: {
+  params: Promise<{ slug: string }>;
+}) => {
+  const { slug } = await params;
+  const post = allPosts.find((post) => post._raw.flattenedPath === slug);
+  if (!post) throw new Error(`Post not found for slug: ${slug}`);
   return (
     <article className='w-full flex flex-col justify-start items-center prose prose-neutral'>
       <div className='w-full max-w-4xl'>
         <div className='flex'>
           <div className='flex grow'>
-            <Link
-              isBlock
-              as={NextLink}
+            <NextLink
               className='text-default-500 hover:text-default-900 justify-start mb-2'
-              color='foreground'
               href='/articles'
-              size='md'
             >
               <ChevronRightLinearIcon
                 className='rotate-180 inline-block mr-1'
                 size={15}
               />
               Back to articles
-            </Link>
+            </NextLink>
           </div>
           <div>
-            <div className='mb-3 flex w-full flex-col items-end'>
-              <User
-                // href={post.author?.link}
-                name={post.author?.name}
-                description={post.author?.username}
-                avatarProps={{
-                  src: post.author?.avatar
-                }}
-              />
+            <div className='mb-3 flex w-full items-center gap-3 text-right'>
+              {post.author?.avatar && (
+                <img
+                  src={post.author.avatar}
+                  alt={post.author?.name || 'Article author'}
+                  className='h-10 w-10 rounded-full object-cover'
+                />
+              )}
+              <div>
+                <p className='font-medium'>{post.author?.name}</p>
+                <p className='text-small text-default-500'>
+                  {post.author?.username}
+                </p>
+              </div>
             </div>
           </div>
         </div>
         {post.image && (
           <div className='relative w-full'>
-            <Image
+            <img
               src={post.image}
               alt={post.title}
-              width={1200}
-              height={600}
               className='mb-4 w-full object-cover'
             />
             <div className='absolute inset-0 flex md:mt-8 mt-2 mx-2 md:mx-4'>

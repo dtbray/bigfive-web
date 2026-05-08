@@ -1,18 +1,19 @@
 import { HeartBoldIcon } from '@/components/icons';
 import { title } from '@/components/primitives';
-import { getTranslations, unstable_setRequestLocale } from 'next-intl/server';
+import { getTranslations, setRequestLocale } from 'next-intl/server';
 import Feedback from './feedback';
-import { Link } from '@/navigation';
+import NextLink from 'next/link';
 
 interface Props {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }
 
 export async function generateMetadata({
-  params: { locale }
+  params
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'about' });
   return {
     title: t('seo.title'),
@@ -20,8 +21,9 @@ export async function generateMetadata({
   };
 }
 
-export default function AboutPage({ params: { locale } }: Props) {
-  unstable_setRequestLocale(locale);
+export default async function AboutPage({ params }: Props) {
+  const { locale } = await params;
+  setRequestLocale(locale);
 
   return (
     <>
@@ -50,9 +52,9 @@ export default function AboutPage({ params: { locale } }: Props) {
         <br />
         <p>
           If you have questions please read through the{' '}
-          <Link href='/faq' className='underline'>
+          <NextLink href='/faq' className='underline'>
             FAQ
-          </Link>{' '}
+          </NextLink>{' '}
           first. If you can&apos;t find an answer there, feel free to contact us
           at thomas@braytel.net.
         </p>

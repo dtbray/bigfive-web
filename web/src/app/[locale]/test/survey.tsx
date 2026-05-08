@@ -5,9 +5,9 @@ import { Button } from '@nextui-org/button';
 import { RadioGroup, Radio } from '@nextui-org/radio';
 import { Progress } from '@nextui-org/progress';
 import confetti from 'canvas-confetti';
-import { useRouter } from '@/navigation';
 
 import { CloseIcon, InfoIcon } from '@/components/icons';
+import { basePath } from '@/config/site';
 import { type Question } from '@bigfive-org/questions';
 import { sleep, formatTimer, isDev } from '@/lib/helpers';
 import useWindowDimensions from '@/hooks/useWindowDimensions';
@@ -21,6 +21,7 @@ interface SurveyProps {
   prevText: string;
   resultsText: string;
   language: string;
+  locale: string;
 }
 
 export const Survey = ({
@@ -28,9 +29,9 @@ export const Survey = ({
   nextText,
   prevText,
   resultsText,
-  language
+  language,
+  locale
 }: SurveyProps) => {
-  const router = useRouter();
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [questionsPerPage, setQuestionsPerPage] = useState(1);
   const [answers, setAnswers] = useState<Answer[]>([]);
@@ -157,7 +158,7 @@ export const Survey = ({
     localStorage.removeItem('inProgress');
     localStorage.removeItem('b5data');
     localStorage.setItem('resultId', id);
-    router.push(`/result?id=${id}`);
+    window.location.href = `${basePath}/${locale}/result?id=${id}`;
   }
 
   function generateLocalResultId() {

@@ -3,7 +3,7 @@
 import { Select, SelectItem } from '@nextui-org/select';
 import { ChangeEvent } from 'react';
 import { Language } from '@bigfive-org/questions';
-import { useRouter } from '@/navigation';
+import { basePath } from '@/config/site';
 
 interface TestLanguageSwitchProps {
   availableLanguages: Language[];
@@ -14,12 +14,9 @@ export const TestLanguageSwitch = ({
   availableLanguages,
   language
 }: TestLanguageSwitchProps) => {
-  const router = useRouter();
-
   function onSelectChange(event: ChangeEvent<HTMLSelectElement>) {
     const selectedLanguage = event.target.value;
-    router.push(`?lang=${selectedLanguage}`);
-    router.refresh();
+    window.location.href = `${basePath}/${selectedLanguage}/test/`;
   }
 
   return (

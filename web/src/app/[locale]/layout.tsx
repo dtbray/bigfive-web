@@ -8,7 +8,7 @@ import Footer from '@/components/footer';
 import { ThemeProviderProps } from 'next-themes';
 import { GoogleAnalytics } from '@next/third-parties/google';
 import { basePath, getNavItems, locales, siteConfig } from '@/config/site';
-import { unstable_setRequestLocale } from 'next-intl/server';
+import { setRequestLocale } from 'next-intl/server';
 import { getTranslations } from 'next-intl/server';
 import { Analytics } from '@vercel/analytics/react';
 import { isRtlLang } from 'rtl-detect';
@@ -20,10 +20,11 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({
-  params: { locale }
+  params
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }): Promise<Metadata> {
+  const { locale } = await params;
   const t = await getTranslations({ locale, namespace: 'frontpage' });
   const s = await getTranslations({ locale, namespace: 'seo' });
   const alternatesLang = locales.reduce((a, v) => ({ ...a, [v]: `/${v}` }), {});
@@ -80,13 +81,14 @@ export const viewport: Viewport = {
 
 export default async function RootLayout({
   children,
-  params: { locale }
+  params
 }: {
   children: React.ReactNode;
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
+  const { locale } = await params;
   const gaId = process.env.NEXT_PUBLIC_ANALYTICS_ID || '';
-  unstable_setRequestLocale(locale);
+  setRequestLocale(locale);
   const direction = isRtlLang(locale) ? 'rtl' : 'ltr';
 
   const navItems = await getNavItems({ locale, linkType: 'navItems' });
@@ -108,7 +110,11 @@ export default async function RootLayout({
           }
         >
           <div className='relative flex flex-col h-screen'>
-            <Navbar navItems={navItems} navMenuItems={navMenuItems} />
+            <Navbar
+              navItems={navItems}
+              navMenuItems={navMenuItems}
+              locale={locale}
+            />
             <main className='container mx-auto max-w-7xl pt-16 px-6 flex-grow'>
               {children}
               <CookieBanner />

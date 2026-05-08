@@ -1,6 +1,3 @@
-import { Card, CardBody, CardHeader } from '@nextui-org/card';
-import { Snippet } from '@nextui-org/snippet';
-
 const agentPrompt = `Answer this Big Five test on my behalf, using what you know about me from your memories and our past conversations. For each question, choose one of: Very Inaccurate, Moderately Inaccurate, Neither Accurate Nor Inaccurate, Moderately Accurate, or Very Accurate.
 
 Only answer from evidence you actually have about me. If you are unsure, choose Neither Accurate Nor Inaccurate. Do not flatter me, diagnose me, or optimize for a result. Be consistent, candid, and brief.
@@ -16,8 +13,8 @@ const agentInstructions = [
 
 export function AgentPrompt() {
   return (
-    <Card className='my-6 border border-secondary/30 bg-secondary/10'>
-      <CardHeader className='flex-col items-start gap-2'>
+    <section className='my-6 rounded-lg border border-secondary/30 bg-secondary/10 p-4'>
+      <header className='flex flex-col items-start gap-2'>
         <h2 className='text-xl font-semibold'>
           Want an agent to help answer?
         </h2>
@@ -25,19 +22,14 @@ export function AgentPrompt() {
           Throw this prompt into your favorite agent and ask it to answer as it
           knows you based on its memories.
         </p>
-      </CardHeader>
-      <CardBody className='gap-4'>
-        <Snippet
-          hideSymbol
-          className='w-full max-w-full text-left'
-          classNames={{
-            pre: 'whitespace-pre-wrap break-words overflow-visible',
-            content: 'whitespace-pre-wrap break-words'
-          }}
-          codeString={agentPrompt}
+      </header>
+      <div className='mt-4 space-y-4'>
+        <pre
+          className='w-full max-w-full whitespace-pre-wrap break-words rounded-lg border border-default-200 bg-background/80 p-4 text-left text-sm leading-6 text-default-700'
+          tabIndex={0}
         >
           {agentPrompt}
-        </Snippet>
+        </pre>
         <div className='rounded-medium border border-default-200 bg-background/60 p-4'>
           <h3 className='mb-2 text-base font-semibold'>
             How the agent should take the test
@@ -48,7 +40,7 @@ export function AgentPrompt() {
             ))}
           </ol>
         </div>
-      </CardBody>
-    </Card>
+      </div>
+    </section>
   );
 }

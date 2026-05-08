@@ -1,11 +1,5 @@
-import { Link as NextUILink } from '@nextui-org/link';
-import { Link } from '../navigation';
-
-import {
-  GithubIcon,
-  LinkedInIcon,
-  Logo
-} from '@/components/icons';
+import Link from 'next/link';
+import { GithubIcon, LinkedInIcon, Logo } from '@/components/icons';
 import { siteConfig } from '@/config/site';
 
 interface FooterProps {
@@ -18,36 +12,38 @@ interface FooterProps {
 export default function Footer({ footerLinks }: FooterProps) {
   const year = new Date().getFullYear();
   return (
-    <footer className='container mx-auto max-w-7xl py-24 px-12'>
-      <div className='container mx-auto flex justify-between'>
+    <footer className='container mx-auto max-w-7xl px-12 py-24'>
+      <div className='mx-auto flex justify-between'>
         <div className='w-1/2'>
           <span className='text-center'>
             <Logo />
           </span>
         </div>
-        <div className='w-1/2 flex justify-end'>
-          <NextUILink
-            isExternal
+        <div className='flex w-1/2 justify-end gap-3'>
+          <a
             href={siteConfig.links.github}
             aria-label='Github'
+            target='_blank'
+            rel='noreferrer'
           >
             <GithubIcon size={48} className='text-default-500' />
-          </NextUILink>
-          <NextUILink
-            isExternal
+          </a>
+          <a
             href={siteConfig.links.linkedIn}
             aria-label='LinkedIn'
+            target='_blank'
+            rel='noreferrer'
           >
             <LinkedInIcon size={48} className='text-default-500' />
-          </NextUILink>
+          </a>
         </div>
       </div>
 
-      <div className='w-full flex justify-center mt-12'>
-        <ul className='flex mt-3 text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0'>
-          {footerLinks.map((item, index) => (
-            <li key={index}>
-              <Link href={item.href} className='hover:underline me-4 md:me-6'>
+      <div className='mt-12 flex w-full justify-center'>
+        <ul className='mt-3 flex text-sm font-medium text-gray-500 dark:text-gray-400 sm:mt-0'>
+          {footerLinks.map((item) => (
+            <li key={item.href}>
+              <Link href={item.href} className='me-4 hover:underline md:me-6'>
                 {item.label}
               </Link>
             </li>
@@ -55,7 +51,7 @@ export default function Footer({ footerLinks }: FooterProps) {
         </ul>
       </div>
 
-      <div className='flex text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:py-2 mt-14 justify-center'>
+      <div className='mt-14 flex justify-center text-sm text-gray-500 sm:ml-4 sm:py-2 sm:pl-4'>
         © {year} — Thomas Bray
       </div>
     </footer>

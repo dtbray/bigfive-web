@@ -1,100 +1,64 @@
-'use client';
-
 import React, { ReactNode } from 'react';
-import { tv } from 'tailwind-variants';
-import {
-  Card,
-  CardHeader,
-  CardBody,
-  LinkProps,
-  SlotsToClasses
-} from '@nextui-org/react';
-import { useRouter } from 'next/navigation';
-import { LinkIcon } from '@nextui-org/shared-icons';
+import clsx from 'clsx';
 
-const styles = tv({
-  slots: {
-    base: 'grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4',
-    card: 'border-transparent bg-white/5 dark:bg-default-400/10 backdrop-blur-lg backdrop-saturate-[1.8]',
-    header: 'gap-2 pb-0',
-    body: '',
-    iconWrapper:
-      'flex justify-center p-2 rounded-full items-center bg-secondary-100/80 text-pink-500',
-    title: 'text-base font-semibold',
-    description: 'font-normal text-base text-default-500'
-  }
-});
-
-export type FeaturesGridSlots = keyof ReturnType<typeof styles>;
-
-export interface Feature extends LinkProps {
+export interface Feature {
   title: string;
   icon: ReactNode;
   description?: string | TrustedHTML;
+  href?: string;
+  isExternal?: boolean;
 }
 
 interface FeaturesGridProps {
   features: Feature[];
-  classNames?: SlotsToClasses<FeaturesGridSlots>;
+  className?: string;
 }
 
-export const FeaturesGrid = ({
-  features,
-  classNames,
-  ...props
-}: FeaturesGridProps) => {
-  const router = useRouter();
-
-  const slots = styles();
-
-  const handleClick = (feat: Feature) => {
-    if (!feat.href) {
-      return;
-    }
-
-    if (feat.isExternal) {
-      window.open(feat.href, '_blank');
-
-      return;
-    }
-    router.push(feat.href);
-  };
-
+export const FeaturesGrid = ({ features, className }: FeaturesGridProps) => {
   return (
-    <div className={slots.base({ class: classNames?.base })} {...props}>
+    <div className={clsx('grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4', className)}>
       {features.map((feat: Feature, index: number) => (
-        <Card
-          key={`${feat.title}_${index}`}
-          isBlurred
-          className={slots.card({ class: classNames?.card })}
-          isPressable={!!feat.href}
-          onPress={() => handleClick(feat)}
-        >
-          <CardHeader className={slots.header({ class: classNames?.header })}>
-            <div
-              className={slots.iconWrapper({ class: classNames?.iconWrapper })}
-            >
-              {feat.icon}
-            </div>
-            <p className={slots.title({ class: classNames?.title })}>
-              {feat.title}
-            </p>
-            {feat.isExternal && (
-              <LinkIcon className='text-white' height={18} width={18} />
-            )}
-          </CardHeader>
-          {feat.description ? (
-            <CardBody className={slots.body({ class: classNames?.body })}>
-              <p
-                className={slots.description({
-                  class: classNames?.description
-                })}
-                dangerouslySetInnerHTML={{ __html: feat.description }}
-              ></p>
-            </CardBody>
-          ) : null}
-        </Card>
+        <FeatureCard feat={feat} key={`${feat.title}_${index}`} />
       ))}
     </div>
+  );
+};
+
+const FeatureCard = ({ feat }: { feat: Feature }) => {
+  const content = (
+    <article className='h-full rounded-lg border border-transparent bg-white/5 p-4 backdrop-blur-lg backdrop-saturate-[1.8] transition-colors hover:border-default-200 dark:bg-default-400/10'>
+      <header className='flex items-center gap-2'>
+        <div className='flex items-center justify-center rounded-full bg-secondary-100/80 p-2 text-pink-500'>
+          {feat.icon}
+        </div>
+        <p className='text-base font-semibold'>{feat.title}</p>
+        {feat.isExternal ? (
+          <span className='text-xs uppercase tracking-wide text-default-500'>
+            External
+          </span>
+        ) : null}
+      </header>
+      {feat.description ? (
+        <p
+          className='mt-3 text-base font-normal text-default-500'
+          dangerouslySetInnerHTML={{ __html: feat.description }}
+        />
+      ) : null}
+    </article>
+  );
+
+  if (!feat.href) {
+    return content;
+  }
+
+  return (
+    <a
+      className='block h-full text-foreground'
+      href={feat.href}
+      rel={feat.isExternal ? 'noreferrer' : undefined}
+      target={feat.isExternal ? '_blank' : undefined}
+    >
+      {content}
+    </a>
   );
 };
