@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "next build && node scripts/write-root-redirect.mjs",
     "start": "next start --turbo",
     "lint": "next lint",
     "format": "prettier --check --ignore-path .gitignore .",
