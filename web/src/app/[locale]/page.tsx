@@ -90,7 +90,7 @@ export default function Home({ params: { locale } }: Props) {
             </div>
 
             <div className='flex flex-col md:flex-row items-center gap-4 justify-center'>
-              <Link
+              <a
                 href={testPath}
                 className={clsx(
                   buttonStyles({
@@ -104,7 +104,7 @@ export default function Home({ params: { locale } }: Props) {
                 )}
               >
                 {t('call_to_action')} <ArrowRightIcon />
-              </Link>
+              </a>
               <Link
                 isExternal
                 className={clsx(
@@ -166,7 +166,7 @@ export default function Home({ params: { locale } }: Props) {
                 aria-label={t('call_to_action')}
                 className='z-50 w-auto h-auto bg-gradient-to-b from-[#FF1CF7] to-[#7928CA]'
                 radius='full'
-                as={Link}
+                as='a'
                 href={testPath}
               >
                 <PlusLinearIcon
