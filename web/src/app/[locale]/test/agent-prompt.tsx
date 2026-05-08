@@ -22,7 +22,11 @@ export function AgentPrompt() {
       <CardBody>
         <Snippet
           hideSymbol
-          className='w-full whitespace-pre-wrap text-left'
+          className='w-full max-w-full text-left'
+          classNames={{
+            pre: 'whitespace-pre-wrap break-words overflow-visible',
+            content: 'whitespace-pre-wrap break-words'
+          }}
           codeString={agentPrompt}
         >
           {agentPrompt}
