@@ -3,6 +3,7 @@ import { Survey } from './survey';
 import { useTranslations } from 'next-intl';
 import { unstable_setRequestLocale } from 'next-intl/server';
 import { TestLanguageSwitch } from './test-language-switch';
+import { AgentPrompt } from './agent-prompt';
 
 const questionLanguages = getInfo().languages;
 
@@ -27,6 +28,7 @@ export default function TestPage({
           language={language}
         />
       </div>
+      {locale === 'en' && <AgentPrompt />}
       <Survey
         questions={questions}
         nextText={t('next')}
