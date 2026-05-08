@@ -28,7 +28,7 @@ export default function Feedback() {
 
   function submitFeedback() {
     const body = encodeURIComponent(`${message}\n\nFrom: ${name} <${email}>`);
-    window.location.href = `mailto:bigfive-test@rubynor.com?subject=Big Five feedback&body=${body}`;
+    window.location.href = `mailto:thomas@braytel.net?subject=Big Five feedback&body=${body}`;
     setSent(true);
   }
 

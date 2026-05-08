@@ -34,13 +34,13 @@ export async function generateMetadata({
     },
     description: t('seo.description'),
     keywords: s('keywords'),
-    authors: [{ name: 'Jonas Enge', url: 'https://bigfive-test.com' }],
+    authors: [{ name: 'Thomas Bray', url: basePath }],
     icons: {
       icon: '/favicon.ico',
       shortcut: '/favicon-16x16.png',
       apple: '/apple-touch-icon.png'
     },
-    metadataBase: new URL('https://bigfive-test.com'),
+    metadataBase: new URL(basePath),
     // alternates: {
     //   canonical: '/',
     //   languages: alternatesLang
@@ -104,7 +104,7 @@ export default async function RootLayout({
       >
         <Providers
           themeProps={
-            { attribute: 'class', defaultTheme: 'light' } as ThemeProviderProps
+            { attribute: 'class', defaultTheme: 'dark' } as ThemeProviderProps
           }
         >
           <div className='relative flex flex-col h-screen'>
@@ -116,10 +116,6 @@ export default async function RootLayout({
             <Footer footerLinks={footerLinks} />
           </div>
         </Providers>
-        <Script
-          src='https://bigfive-test.com/sw.js'
-          strategy='beforeInteractive'
-        />
         <Analytics />
       </body>
       <GoogleAnalytics gaId={gaId} />

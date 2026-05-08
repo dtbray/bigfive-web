@@ -54,7 +54,7 @@ export default function AboutPage({ params: { locale } }: Props) {
             FAQ
           </Link>{' '}
           first. If you can&apos;t find an answer there, feel free to contact us
-          at bigfive-test@rubynor.com.
+          at thomas@braytel.net.
         </p>
       </div>
       <section>

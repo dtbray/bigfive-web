@@ -2,9 +2,9 @@ import { getTranslations } from 'next-intl/server';
 
 export type SiteConfig = typeof siteConfig;
 
-export const basePath = 'https://bigfive-test.com';
+export const basePath = 'https://blog.thomas-bray.com/bigfive-web';
 
-export const supportEmail = 'bigfive-test@rubynor.com';
+export const supportEmail = 'thomas@braytel.net';
 
 export type Language = {
   code: string;
@@ -133,10 +133,8 @@ export const siteConfig = {
     }
   ],
   links: {
-    github: 'https://github.com/rubynor/bigfive-web',
-    twitter: 'https://twitter.com/rubynor',
-    linkedIn: 'https://www.linkedin.com/company/rubynor-as/',
-    facebook: 'https://www.facebook.com/rubynorno'
+    github: 'https://github.com/dtbray/bigfive-web',
+    linkedIn: 'https://www.linkedin.com/in/dtbray/'
   }
 };
 

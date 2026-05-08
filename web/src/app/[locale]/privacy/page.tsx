@@ -71,7 +71,7 @@ export default function PrivacyPage() {
         <h2>How to contact us?</h2>
         If you have any questions about this privacy policy, please{' '}
         <a
-          href='mailto:support@bigfive-test.com'
+          href='mailto:thomas@braytel.net'
           rel='noopener noreferrer'
           target='_blank'
         >

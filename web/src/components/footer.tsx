@@ -2,10 +2,8 @@ import { Link as NextUILink } from '@nextui-org/link';
 import { Link } from '../navigation';
 
 import {
-  TwitterIcon,
   GithubIcon,
   LinkedInIcon,
-  FacebookIcon,
   Logo
 } from '@/components/icons';
 import { siteConfig } from '@/config/site';
@@ -30,13 +28,6 @@ export default function Footer({ footerLinks }: FooterProps) {
         <div className='w-1/2 flex justify-end'>
           <NextUILink
             isExternal
-            href={siteConfig.links.twitter}
-            aria-label='Twitter'
-          >
-            <TwitterIcon size={48} className='text-default-500' />
-          </NextUILink>
-          <NextUILink
-            isExternal
             href={siteConfig.links.github}
             aria-label='Github'
           >
@@ -48,13 +39,6 @@ export default function Footer({ footerLinks }: FooterProps) {
             aria-label='LinkedIn'
           >
             <LinkedInIcon size={48} className='text-default-500' />
-          </NextUILink>
-          <NextUILink
-            isExternal
-            href={siteConfig.links.facebook}
-            aria-label='Facebook'
-          >
-            <FacebookIcon size={48} className='text-default-500' />
           </NextUILink>
         </div>
       </div>
@@ -72,7 +56,7 @@ export default function Footer({ footerLinks }: FooterProps) {
       </div>
 
       <div className='flex text-sm text-gray-500 sm:ml-4 sm:pl-4 sm:py-2 mt-14 justify-center'>
-        © {year} — B5 Holding AS - all rights reserved.
+        © {year} — Thomas Bray
       </div>
     </footer>
   );

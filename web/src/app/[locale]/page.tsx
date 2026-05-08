@@ -13,7 +13,7 @@ import {
   PlusLinearIcon
 } from '@/components/icons';
 import { ArrowRightIcon } from '@/components/icons';
-import { siteConfig } from '@/config/site';
+import { basePath, siteConfig } from '@/config/site';
 import { compareDesc } from 'date-fns';
 import { allPosts } from 'contentlayer/generated';
 import { PostCard } from '@/components/post-card';
@@ -32,7 +32,6 @@ export default function Home({ params: { locale } }: Props) {
   unstable_setRequestLocale(locale);
   const t = useTranslations('frontpage');
   const f = useTranslations('facets');
-  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
   const testPath = `${basePath}/${locale}/test/`;
   const articlesPath = `${basePath}/${locale}/articles/`;
 
