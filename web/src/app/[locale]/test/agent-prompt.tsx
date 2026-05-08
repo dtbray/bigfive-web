@@ -32,6 +32,7 @@ const agentInstructions = [
   'Use the machine-readable JSON: https://blog.thomas-bray.com/bigfive-web/big-five-agent-input.json.',
   'Return one allowed choice label for every numbered question.',
   'If code execution is available, compute scores from the choice scores in the JSON.',
+  'The returned JSON can be pasted into the result page to generate a local result.',
   'If using the web form instead, open https://blog.thomas-bray.com/bigfive-web/en/test/.',
   'Answer each visible question by selecting one of the radio options.',
   'When every question is answered, press See Results.'
