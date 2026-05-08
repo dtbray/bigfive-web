@@ -1,10 +1,7 @@
-import { getItems, getInfo } from '@bigfive-org/questions';
+import { getItems } from '@bigfive-org/questions';
 import { Survey } from './survey';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import { TestLanguageSwitch } from './test-language-switch';
 import { AgentPrompt } from './agent-prompt';
-
-const questionLanguages = getInfo().languages;
 
 interface Props {
   params: Promise<{ locale: string }>;
@@ -13,19 +10,11 @@ interface Props {
 export default async function TestPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
-  const language = questionLanguages.some((l) => l.id === locale)
-    ? locale
-    : 'en';
+  const language = 'en';
   const questions = getItems(language);
   const t = await getTranslations('test');
   return (
     <>
-      <div className='flex'>
-        <TestLanguageSwitch
-          availableLanguages={questionLanguages}
-          language={language}
-        />
-      </div>
       {locale === 'en' && <AgentPrompt />}
       <Survey
         questions={questions}
