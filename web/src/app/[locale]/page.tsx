@@ -32,6 +32,9 @@ export default function Home({ params: { locale } }: Props) {
   unstable_setRequestLocale(locale);
   const t = useTranslations('frontpage');
   const f = useTranslations('facets');
+  const basePath = process.env.NEXT_PUBLIC_BASE_PATH || '';
+  const testPath = `${basePath}/${locale}/test/`;
+  const articlesPath = `${basePath}/${locale}/articles/`;
 
   const posts = allPosts
     .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
@@ -89,7 +92,7 @@ export default function Home({ params: { locale } }: Props) {
 
             <div className='flex flex-col md:flex-row items-center gap-4 justify-center'>
               <Link
-                href='/test'
+                href={testPath}
                 className={clsx(
                   buttonStyles({
                     color: 'primary',
@@ -165,7 +168,7 @@ export default function Home({ params: { locale } }: Props) {
                 className='z-50 w-auto h-auto bg-gradient-to-b from-[#FF1CF7] to-[#7928CA]'
                 radius='full'
                 as={Link}
-                href='/test'
+                href={testPath}
               >
                 <PlusLinearIcon
                   className='flex items-center justify-center rounded-full text-white'
@@ -238,7 +241,7 @@ export default function Home({ params: { locale } }: Props) {
       </div>
 
       <div className='text-center mx-2'>
-        <Link href='/articles' color='foreground'>
+        <Link href={articlesPath} color='foreground'>
           <h1 className={title()}>Latest posts</h1>
         </Link>
         <h2 className={subtitle({ class: 'mt-4' })}>
@@ -255,7 +258,7 @@ export default function Home({ params: { locale } }: Props) {
             as={NextLink}
             className='mb-8 -ml-3 text-default-500 hover:text-default-900 text-lg'
             color='foreground'
-            href='/articles'
+            href={articlesPath}
             size='md'
           >
             Show all articles ...
