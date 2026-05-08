@@ -1,6 +1,7 @@
 'use client';
 
 import { CopyIcon } from '@/components/icons';
+import { basePath } from '@/config/site';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 
 const agentPrompt = `Answer this Big Five test on my behalf, using what you know about me from your memories and our past conversations. For each question, choose one of: Very Inaccurate, Moderately Inaccurate, Neither Accurate Nor Inaccurate, Moderately Accurate, or Very Accurate.
@@ -11,6 +12,7 @@ Return a numbered list in order, with only the selected answer text for each ite
 
 const agentInstructions = [
   'Open this page: https://blog.thomas-bray.com/bigfive-web/en/test/',
+  'For a machine-readable version of the questions and answer format, use https://blog.thomas-bray.com/bigfive-web/big-five-agent-input.json.',
   'Answer each visible question by selecting one of the radio options.',
   'On narrow screens the test advances after each answer. On wider screens, answer the visible questions, then press Next.',
   'When every question is answered, press See Results.'
@@ -57,6 +59,16 @@ export function AgentPrompt() {
           <h3 className='mb-2 text-base font-semibold'>
             How the agent should take the test
           </h3>
+          <p className='mb-3 text-sm text-default-700'>
+            Agents can also use the{' '}
+            <a
+              className='underline'
+              href={`${basePath}/big-five-agent-input.json`}
+            >
+              machine-readable JSON
+            </a>
+            .
+          </p>
           <ol className='list-decimal space-y-2 pl-5 text-sm text-default-700'>
             {agentInstructions.map((instruction) => (
               <li key={instruction}>{instruction}</li>
