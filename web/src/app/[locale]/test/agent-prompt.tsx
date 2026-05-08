@@ -7,7 +7,7 @@ const agentPrompt = `Answer this Big Five test on my behalf, using what you know
 
 Only answer from evidence you actually have about me. If you are unsure, choose Neither Accurate Nor Inaccurate. Do not flatter me, diagnose me, or optimize for a result. Be consistent, candid, and brief.
 
-Return a numbered list in order, with only the selected answer text for each item.`;
+Return a numbered list in order, with only the selected answer text for each item. After the test results are generated, return the results with some commentary about them in the context of the user's co-work with the agent.`;
 
 const agentInstructions = [
   'Open this page: https://blog.thomas-bray.com/bigfive-web/en/test/',
