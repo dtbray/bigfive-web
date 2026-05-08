@@ -4,17 +4,36 @@ import { CopyIcon } from '@/components/icons';
 import { basePath } from '@/config/site';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 
-const agentPrompt = `Answer this Big Five test on my behalf, using what you know about me from your memories and our past conversations. For each question, choose one of: Very Inaccurate, Moderately Inaccurate, Neither Accurate Nor Inaccurate, Moderately Accurate, or Very Accurate.
+const agentPrompt = `Answer this Big Five test on my behalf, using what you know about me from your memories and our past conversations.
+
+Use the machine-readable test input here:
+https://blog.thomas-bray.com/bigfive-web/big-five-agent-input.json
+
+For each question, choose exactly one allowed choice label:
+- Very Inaccurate
+- Moderately Inaccurate
+- Neither Accurate Nor Inaccurate
+- Moderately Accurate
+- Very Accurate
 
 Only answer from evidence you actually have about me. If you are unsure, choose Neither Accurate Nor Inaccurate. Do not flatter me, diagnose me, or optimize for a result. Be consistent, candid, and brief.
 
-Return a numbered list in order, with only the selected answer text for each item. After the test results are generated, return the results with some commentary about them in the context of the user's co-work with the agent.`;
+Return JSON in this shape:
+{
+  "answers": [
+    { "number": 1, "choice": "Neither Accurate Nor Inaccurate" }
+  ],
+  "commentary": "Briefly explain the results in the context of our co-work."
+}
+
+If you can run code, score the answers using the question choice scores in the JSON. If not, return the completed answers and summarize the likely Big Five profile.`;
 
 const agentInstructions = [
-  'Open this page: https://blog.thomas-bray.com/bigfive-web/en/test/',
-  'For a machine-readable version of the questions and answer format, use https://blog.thomas-bray.com/bigfive-web/big-five-agent-input.json.',
+  'Use the machine-readable JSON: https://blog.thomas-bray.com/bigfive-web/big-five-agent-input.json.',
+  'Return one allowed choice label for every numbered question.',
+  'If code execution is available, compute scores from the choice scores in the JSON.',
+  'If using the web form instead, open https://blog.thomas-bray.com/bigfive-web/en/test/.',
   'Answer each visible question by selecting one of the radio options.',
-  'On narrow screens the test advances after each answer. On wider screens, answer the visible questions, then press Next.',
   'When every question is answered, press See Results.'
 ];
 
@@ -60,14 +79,14 @@ export function AgentPrompt() {
             How the agent should take the test
           </h3>
           <p className='mb-3 text-sm text-default-700'>
-            Agents can also use the{' '}
+            Agents should use the{' '}
             <a
               className='underline'
               href={`${basePath}/big-five-agent-input.json`}
             >
               machine-readable JSON
             </a>
-            .
+            . The web form is a fallback.
           </p>
           <ol className='list-decimal space-y-2 pl-5 text-sm text-default-700'>
             {agentInstructions.map((instruction) => (
