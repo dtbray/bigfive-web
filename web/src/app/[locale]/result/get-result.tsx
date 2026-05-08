@@ -4,7 +4,6 @@ import { button as buttonStyles } from '@nextui-org/theme';
 import { Link } from '@nextui-org/link';
 import clsx from 'clsx';
 import { Button } from '@nextui-org/button';
-import { useRouter } from '@/navigation';
 import { formatAndValidateId, formatId } from '@/lib/helpers';
 import { useEffect, useMemo, useState } from 'react';
 import { Input } from '@nextui-org/input';
@@ -34,8 +33,6 @@ export const GetResultPage = ({
   viewPreviousText,
   getResultsText
 }: GetResultPageProps) => {
-  const router = useRouter();
-
   const [previousResultId, setPreviousResultId] = useState<string | null>(null);
   const [id, setId] = useState('');
   const [agentJson, setAgentJson] = useState('');
@@ -70,7 +67,7 @@ export const GetResultPage = ({
 
   const handleGetResults = () => {
     if (!formatAndValidateId(id)) return;
-    router.push(`/result?id=${formatId(id)}`);
+    window.location.href = getResultUrl(formatId(id));
   };
 
   const handleImportAgentJson = () => {
@@ -162,8 +159,18 @@ export const GetResultPage = ({
       })
     );
     localStorage.setItem('resultId', resultId);
-    window.location.href = `${basePath}/en/result?id=${resultId}`;
+    window.location.href = getResultUrl(resultId);
   };
+
+  function getResultUrl(resultId: string) {
+    const deployedBase = new URL(basePath);
+    const basePathname =
+      window.location.hostname === deployedBase.hostname
+        ? deployedBase.pathname
+        : '';
+
+    return `${basePathname}/en/result?id=${resultId}`;
+  }
 
   function generateLocalResultId() {
     const bytes = new Uint8Array(12);

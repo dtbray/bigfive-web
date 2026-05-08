@@ -3,7 +3,6 @@
 import { Select, SelectItem } from '@nextui-org/select';
 import { ChangeEvent } from 'react';
 import { Language } from '@bigfive-org/results';
-import { useRouter } from '@/navigation';
 import { useSearchParams } from 'next/navigation';
 
 export const ReportLanguageSwitch = ({
@@ -13,15 +12,13 @@ export const ReportLanguageSwitch = ({
   language: string;
   availableLanguages: Language[];
 }) => {
-  const router = useRouter();
   const searchParams = useSearchParams();
 
   function onSelectChange(event: ChangeEvent<HTMLSelectElement>) {
     const selectedLanguage = event.target.value;
     const params = new URLSearchParams(searchParams.toString());
     params.set('lang', selectedLanguage);
-    router.push(`?${params.toString()}`);
-    router.refresh();
+    window.location.search = params.toString();
   }
 
   return (

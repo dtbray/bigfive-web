@@ -3,15 +3,12 @@
 import { Button } from '@nextui-org/button';
 import { Image } from '@nextui-org/image';
 import { useCallback } from 'react';
-import { useRouter } from '@/navigation';
 import { title } from '@/components/primitives';
 
 export default function NotFound() {
-  const router = useRouter();
-
   const onBackClick = useCallback(() => {
-    router.back();
-  }, [router]);
+    window.history.back();
+  }, []);
 
   return (
     <main className='flex h-full flex-col items-center justify-center'>

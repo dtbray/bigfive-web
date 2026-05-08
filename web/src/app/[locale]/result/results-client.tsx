@@ -3,7 +3,6 @@
 import { useEffect, useMemo, useState } from 'react';
 import { Snippet } from '@nextui-org/snippet';
 import { Chip } from '@nextui-org/react';
-import { useTranslations } from 'next-intl';
 import calculateScore from '@bigfive-org/score';
 import generateResult, { getInfo } from '@bigfive-org/results';
 
@@ -21,6 +20,12 @@ type ResultsClientProps = {
   id?: string;
   language?: string;
   showExpanded?: boolean;
+  labels: {
+    important: string;
+    saveResults: string;
+    theBigFive: string;
+    score: string;
+  };
 };
 
 const resultLanguages = getInfo().languages;
@@ -28,9 +33,9 @@ const resultLanguages = getInfo().languages;
 export function ResultsClient({
   id,
   language,
-  showExpanded
+  showExpanded,
+  labels
 }: ResultsClientProps) {
-  const t = useTranslations('results');
   const [storedResult, setStoredResult] = useState<DbResult | null | undefined>(
     undefined
   );
@@ -89,8 +94,8 @@ export function ResultsClient({
         <Chip>{new Date(report.timestamp).toLocaleDateString()}</Chip>
       </div>
       <div className='text-center mt-4'>
-        <span className='font-bold'>{t('important')}</span> &nbsp;
-        {t('saveResults')}
+        <span className='font-bold'>{labels.important}</span> &nbsp;
+        {labels.saveResults}
       </div>
       <div className='flex mt-4'>
         <Snippet
@@ -106,13 +111,13 @@ export function ResultsClient({
         <ShareBar report={report} />
       </div>
       <div className='flex mt-10'>
-        <h1 className={title()}>{t('theBigFive')}</h1>
+        <h1 className={title()}>{labels.theBigFive}</h1>
       </div>
       <BarChart max={120} results={report.results} />
       <DomainTabs
         results={report.results}
         showExpanded={!!showExpanded}
-        scoreText={t('score')}
+        scoreText={labels.score}
       />
     </>
   );

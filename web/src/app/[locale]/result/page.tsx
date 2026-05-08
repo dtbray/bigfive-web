@@ -12,10 +12,17 @@ export default async function ResultPage({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations('getResult');
+  const results = await getTranslations('results');
 
   return (
     <Suspense>
       <ResultPageClient
+        labels={{
+          important: results('important'),
+          saveResults: results('saveResults'),
+          theBigFive: results('theBigFive'),
+          score: results('score')
+        }}
         fallback={
           <div className='h-[calc(60vh)]'>
             <h1 className={title()}>{t('result')}</h1>
