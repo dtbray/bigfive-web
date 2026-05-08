@@ -11,7 +11,6 @@ import { Alert } from '@/components/alert';
 import { BarChart } from '@/components/bar-chart';
 import ShareBar from '@/components/share-bar';
 import { title } from '@/components/primitives';
-import { Link } from '@/navigation';
 import { supportEmail } from '@/config/site';
 import type { DbResult } from '@/types';
 import type { Report } from '@/types/report';
@@ -91,12 +90,7 @@ export function ResultsClient({
       </div>
       <div className='text-center mt-4'>
         <span className='font-bold'>{t('important')}</span> &nbsp;
-        {t('saveResults')} &nbsp;
-        <Link href={`/compare/?id=${report.id}`} className='underline'>
-          {t('compare')}
-        </Link>{' '}
-        &nbsp;
-        {t('toOthers')}
+        {t('saveResults')}
       </div>
       <div className='flex mt-4'>
         <Snippet

@@ -1,7 +1,5 @@
-import { HeartBoldIcon } from '@/components/icons';
 import { title } from '@/components/primitives';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import Feedback from './feedback';
 import NextLink from 'next/link';
 
 interface Props {
@@ -32,52 +30,47 @@ export default async function AboutPage({ params }: Props) {
       </div>
       <div className='mt-2 text-medium lg:mt-4 lg:text-large'>
         <p>
-          This project is an open-source Big Five self-report questionnaire
-          based on Johnson&apos;s public-domain 120-item IPIP-NEO item set. It
-          summarizes Openness, Conscientiousness, Extraversion, Agreeableness,
-          and Neuroticism.
+          Psychometric models have a wonderful stage presence. Put five traits
+          in a table, add a few decimal places, and suddenly a person feels less
+          like a chaotic weather system and more like a dashboard with
+          quarterly reporting.
         </p>
         <br />
         <p>
-          Results are useful for personal reflection and informal comparison,
-          but they are raw questionnaire summaries. They should not be treated
-          as a diagnosis, hiring screen, clinical assessment, or a substitute
-          for a professionally administered, normed instrument.
-        </p>
-        <p>
-          The Big Five model remains a mainstream personality framework, while
-          current research also emphasizes measurement uncertainty, cultural and
-          language differences, and careful interpretation of facet scores.
+          That authority can be useful. The Big Five is a serious,
+          well-traveled personality framework, and this site uses Johnson&apos;s
+          public-domain 120-item IPIP-NEO item set. But the output is still a
+          self-report questionnaire summary, not a diagnosis, hiring oracle, or
+          laminated permission slip from the Department of Who You Really Are.
         </p>
         <br />
         <p>
-          If you have questions please read through the{' '}
+          The catch is that 120 questions take a while. Humans have jobs,
+          snacks, tabs open, and only so much patience for deciding whether they
+          &quot;often feel blue&quot; before lunch. So we are increasing test
+          velocity with vibe coding: publish the questions as JSON, hand them to
+          an agent that already knows your working style, and let it produce a
+          defensible first pass while admitting uncertainty where it has no
+          evidence.
+        </p>
+        <br />
+        <p>
+          Treat the result as a conversation starter. If the model says you are
+          highly conscientious while your desk is conducting its own archaeology
+          project, that is not a contradiction. It is a useful reminder that
+          personality scores describe tendencies, contexts, and interpretations,
+          not a legally binding description of your sock drawer.
+        </p>
+        <br />
+        <p>
+          If you have questions, read through the{' '}
           <NextLink href='/faq' className='underline'>
             FAQ
           </NextLink>{' '}
-          first. If you can&apos;t find an answer there, feel free to contact us
-          at thomas@braytel.net.
+          first. If you can&apos;t find an answer there, contact us at
+          thomas@braytel.net.
         </p>
       </div>
-      <section>
-        <div className='text-center justify-center mt-20'>
-          <h2 className={title()}>We love feedback!&nbsp;</h2>
-          <div className='flex md:inline-flex flex-col md:flex-row items-center'>
-            <HeartBoldIcon
-              className='text-pink-500 animate-heartbeat'
-              size={50}
-              style={{
-                animationDuration: '2.5s'
-              }}
-            />
-          </div>
-          <div className='mt-2 text-medium lg:mt-4 lg:text-large'>
-            Send us feedback about how our features can be improved or specific
-            issues.
-          </div>
-        </div>
-        <Feedback />
-      </section>
     </>
   );
 }

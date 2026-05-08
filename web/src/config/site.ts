@@ -68,14 +68,6 @@ export const siteConfig = {
       href: '/result'
     },
     {
-      label: 'compare',
-      href: '/compare'
-    },
-    {
-      label: 'articles',
-      href: '/articles'
-    },
-    {
       label: 'about',
       href: '/about'
     }
@@ -88,14 +80,6 @@ export const siteConfig = {
     {
       label: 'see_results',
       href: '/result'
-    },
-    {
-      label: 'compare_with',
-      href: '/compare'
-    },
-    {
-      label: 'articles',
-      href: '/articles'
     },
     {
       label: 'privacy',
@@ -114,10 +98,6 @@ export const siteConfig = {
     {
       label: 'home',
       href: '/'
-    },
-    {
-      label: 'articles',
-      href: '/articles'
     },
     {
       label: 'privacy',

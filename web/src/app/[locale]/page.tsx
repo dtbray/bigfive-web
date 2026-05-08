@@ -5,17 +5,11 @@ import {
   GithubIcon,
   LanguageIcon,
   LogosOpensource,
-  MoneyIcon,
-  PlusLinearIcon
+  MoneyIcon
 } from '@/components/icons';
 import { ArrowRightIcon } from '@/components/icons';
 import { basePath, siteConfig } from '@/config/site';
-import { compareDesc } from 'date-fns';
-import { allPosts } from 'contentlayer/generated';
-import { PostCard } from '@/components/post-card';
-import { SonarPulse } from '@/components/sonar-pulse';
 import { getTranslations, setRequestLocale } from 'next-intl/server';
-import NextLink from 'next/link';
 import { Translated } from '@/components/translated';
 
 interface Props {
@@ -26,13 +20,7 @@ export default async function Home({ params }: Props) {
   const { locale } = await params;
   setRequestLocale(locale);
   const t = await getTranslations('frontpage');
-  const f = await getTranslations('facets');
   const testPath = `${basePath}/${locale}/test/`;
-  const articlesPath = `${basePath}/${locale}/articles/`;
-
-  const posts = allPosts
-    .sort((a, b) => compareDesc(new Date(a.date), new Date(b.date)))
-    .slice(0, 3);
 
   const features = [
     {
@@ -119,128 +107,7 @@ export default async function Home({ params }: Props) {
         </div>
       </section>
 
-      <div className='mt-20 text-center'>
-        <h1 className={title()}>{t('compare.title')}</h1>
-
-        <div className='mt-10'>
-          <div className='text-lg lg:text-xl font-normal text-default-500'>
-            {t('compare.text1')} {t('compare.text2')}
-          </div>
-        </div>
-      </div>
-
-      <div className='text-center h-64 md:h-80 mt-44 md:mt-56'>
-        <SonarPulse
-          color='#7928CA'
-          icon={
-            <a
-              aria-label={t('call_to_action')}
-              className='z-50 flex h-[70px] w-[70px] items-center justify-center rounded-full bg-gradient-to-b from-[#FF1CF7] to-[#7928CA]'
-              href={testPath}
-            >
-              <PlusLinearIcon
-                className='flex items-center justify-center rounded-full text-white'
-                size={54}
-              />
-            </a>
-          }
-        >
-          <div
-            className='absolute rounded-full'
-            style={{
-              width: '130px',
-              top: 130 / 6,
-              left: -120
-            }}
-          >
-            {buildCircle([
-              {
-                name: f('openness_to_experience.title'),
-                href: '/articles/openness_to_experience'
-              },
-              {
-                name: f('conscientiousness.title'),
-                href: '/articles/conscientiousness'
-              },
-              { name: f('extraversion.title'), href: '/articles/extraversion' },
-              {
-                name: t('compare.action'),
-                href: '/compare/W3sibmFtZSI6Ik1hcnZpbiIsImlkIjoiNThhNzA2MDZhODM1YzQwMGM4YjM4ZTg0In0seyJuYW1lIjoiQXJ0aHVyIERlbnQiLCJpZCI6IjVlNTZiYTdhYjA5NjEzMDAwN2Q1ZDZkOCJ9LHsibmFtZSI6IkZvcmQgUGVyZmVjdCIsImlkIjoiNWRlYTllODhlMTA4Y2IwMDYyMTgzYWYzIn0seyJuYW1lIjoiU2xhcnRpYmFydGZhc3QiLCJpZCI6IjVlNTZiNjUwYjA5NjEzMDAwN2Q1ZDZkMCJ9XQ'
-              },
-              {
-                name: f('agreeableness.title'),
-                href: '/articles/agreeableness'
-              },
-              { name: f('neuroticism.title'), href: '/articles/neuroticism' }
-            ]).map((e, idx) => (
-              <div key={idx}>
-                <NextLink
-                  key={idx}
-                  style={e.style}
-                  className='absolute hidden rounded-full border border-default-300 px-4 py-2 text-sm hover:bg-secondary md:inline-flex'
-                  href={e.href}
-                  aria-label={e.name}
-                >
-                  {e.name}
-                </NextLink>
-                <NextLink
-                  aria-label={e.name}
-                  className='absolute left-[85px] w-36 rounded-full bg-secondary px-3 py-1 text-center text-xs text-white shadow-black drop-shadow md:hidden'
-                  style={e.smallStyle}
-                  href={e.href}
-                >
-                  {e.name}
-                </NextLink>
-              </div>
-            ))}
-          </div>
-        </SonarPulse>
-      </div>
-
-      <div className='text-center mx-2'>
-        <NextLink href={articlesPath} className='text-foreground'>
-          <h1 className={title()}>Latest posts</h1>
-        </NextLink>
-        <h2 className={subtitle({ class: 'mt-4' })}>
-          All the latest and greatest news and articles on #personality
-        </h2>
-        <div className='mt-10 grid gap-4 grid-cols-[repeat(auto-fill,minmax(300px,1fr))]'>
-          {posts.map((post, idx) => (
-            <PostCard key={idx} {...post} />
-          ))}
-        </div>
-        <div className='mt-10'>
-          <NextLink
-            className='mb-8 -ml-3 block text-lg text-default-500 hover:text-default-900'
-            href={articlesPath}
-          >
-            Show all articles ...
-          </NextLink>
-        </div>
-      </div>
-
       <Translated />
     </section>
   );
 }
-const buildCircle = (list: { name: string; href: string }[]) => {
-  const num = list.length; // Number of Avatars
-  const radius = 180; // Distance from center
-  const start = -90; // Shift start from 0
-  const slice = 360 / num;
-
-  return list.map((item, idx) => {
-    const rotate = slice * idx + start;
-    return {
-      name: item.name,
-      href: item.href,
-      style: {
-        transform: `rotate(${rotate}deg) translate(${radius - 20}px) rotate(${-rotate}deg)`,
-        width: '195px'
-      },
-      smallStyle: {
-        transform: `rotate(${rotate}deg) translate(${radius - 60}px) rotate(${-rotate}deg)`
-      }
-    };
-  });
-};
