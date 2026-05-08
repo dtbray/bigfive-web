@@ -240,9 +240,12 @@ export const Survey = ({
       )}
       {currentQuestions.map((question) => (
         <div key={'q' + question.num}>
-          <h2 className='text-2xl my-4'>{question.text}</h2>
+          <h2 id={`question-${question.id}`} className='text-2xl my-4'>
+            {question.text}
+          </h2>
           <div>
             <RadioGroup
+              aria-labelledby={`question-${question.id}`}
               onValueChange={(value) => handleAnswer(question.id, value)}
               value={answers
                 .find((answer) => answer.id === question.id)
