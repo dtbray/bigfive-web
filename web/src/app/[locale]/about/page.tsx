@@ -30,22 +30,22 @@ export default function AboutPage({ params: { locale } }: Props) {
       </div>
       <div className='mt-2 text-medium lg:mt-4 lg:text-large'>
         <p>
-          Welcome to bigfive-test.com, your premier destination for exploring
-          personality traits using the scientifically acclaimed Big Five model.
-          Our free, open-source test offers detailed insights into the five key
-          dimensions of personality: Openness, Conscientiousness, Extraversion,
-          Agreeableness, and Neuroticism.
+          This project is an open-source Big Five self-report questionnaire
+          based on Johnson&apos;s public-domain 120-item IPIP-NEO item set. It
+          summarizes Openness, Conscientiousness, Extraversion, Agreeableness,
+          and Neuroticism.
         </p>
         <br />
         <p>
-          Each dimension is carefully analyzed to provide a comprehensive view
-          of your traits and how they influence your behavior and interactions.
+          Results are useful for personal reflection and informal comparison,
+          but they are raw questionnaire summaries. They should not be treated
+          as a diagnosis, hiring screen, clinical assessment, or a substitute
+          for a professionally administered, normed instrument.
         </p>
         <p>
-          Developed with precision and accessibility in mind, our test helps you
-          understand yourself better and foster personal growth. Embrace the
-          journey of self-discovery with bigfive-test.com, where psychological
-          insights meet user-friendly technology.
+          The Big Five model remains a mainstream personality framework, while
+          current research also emphasizes measurement uncertainty, cultural and
+          language differences, and careful interpretation of facet scores.
         </p>
         <br />
         <p>

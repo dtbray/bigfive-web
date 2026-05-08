@@ -20,7 +20,6 @@ interface SurveyProps {
   nextText: string;
   prevText: string;
   resultsText: string;
-  saveTest: Function;
   language: string;
 }
 
@@ -29,7 +28,6 @@ export const Survey = ({
   nextText,
   prevText,
   resultsText,
-  saveTest,
   language
 }: SurveyProps) => {
   const router = useRouter();
@@ -142,19 +140,32 @@ export const Survey = ({
   async function submitTest() {
     setLoading(true);
     confetti({});
-    const result = await saveTest({
+    const id = generateLocalResultId();
+    const result = {
       testId: 'b5-120',
       lang: language,
       invalid: false,
       timeElapsed: seconds,
-      dateStamp: new Date(),
+      dateStamp: new Date().toISOString(),
       answers
-    });
+    };
+    const storedResults = JSON.parse(localStorage.getItem('b5results') || '{}');
+    localStorage.setItem(
+      'b5results',
+      JSON.stringify({ ...storedResults, [id]: result })
+    );
     localStorage.removeItem('inProgress');
     localStorage.removeItem('b5data');
-    console.log(result);
-    localStorage.setItem('resultId', result.id);
-    router.push(`/result/${result.id}`);
+    localStorage.setItem('resultId', id);
+    router.push(`/result?id=${id}`);
+  }
+
+  function generateLocalResultId() {
+    const bytes = new Uint8Array(12);
+    crypto.getRandomValues(bytes);
+    return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join(
+      ''
+    );
   }
 
   function dataInLocalStorage() {

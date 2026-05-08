@@ -3,7 +3,7 @@
 import { Button, Tooltip } from '@nextui-org/react';
 import { CopyIcon, FacebookIcon, PDFIcon, TwitterIcon } from './icons';
 import { Link as NextUiLink } from '@nextui-org/link';
-import { Report } from '@/actions/index';
+import type { Report } from '@/types/report';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 
 interface ShareBarProps {
@@ -12,6 +12,10 @@ interface ShareBarProps {
 
 export default function ShareBar({ report }: ShareBarProps) {
   const [_, copy] = useCopyToClipboard();
+  const resultUrl =
+    typeof window === 'undefined'
+      ? ''
+      : `${window.location.origin}${window.location.pathname}?id=${report.id}`;
 
   const handleCopy = (text: string) => async () => await copy(text);
 
@@ -26,7 +30,7 @@ export default function ShareBar({ report }: ShareBarProps) {
           variant='light'
           as={NextUiLink}
           isExternal
-          href={`https://www.facebook.com/sharer/sharer.php?u=https://bigfive-test.com/result/${report.id}`}
+          href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(resultUrl)}`}
         >
           <FacebookIcon size={48} />
         </Button>
@@ -40,7 +44,7 @@ export default function ShareBar({ report }: ShareBarProps) {
           variant='light'
           target='_blank'
           as={NextUiLink}
-          href={`https://twitter.com/intent/tweet?text=See my personality traits!&url=https://bigfive-test.com/result/${report.id}`}
+          href={`https://twitter.com/intent/tweet?text=See my personality traits!&url=${encodeURIComponent(resultUrl)}`}
         >
           <TwitterIcon size={42} />
         </Button>
@@ -64,7 +68,7 @@ export default function ShareBar({ report }: ShareBarProps) {
           radius='full'
           size='md'
           variant='light'
-          onPress={handleCopy(`https://bigfive-test.com/result/${report.id}`)}
+          onPress={handleCopy(resultUrl)}
         >
           <CopyIcon size={42} />
         </Button>

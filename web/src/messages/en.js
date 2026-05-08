@@ -37,7 +37,7 @@ const english = {
       },
       scientific: {
         title: 'Scientific',
-        text: 'BigFive is a scientifically validated and reliable psychological model.'
+        text: 'This test uses Johnson’s public-domain 120-item IPIP-NEO item set for educational self-reflection.'
       },
       translated: {
         title: 'Translated',
@@ -51,7 +51,7 @@ const english = {
         ' is the most scientifically validated and reliable psychological model to measure personality.',
       reference: `Tests and evaluation for this site is gathered from
 <a href="http://ipip.ori.org" rel="noopener" target="_blank">ipip.ori.org</a>,
-inventory is from <i>Johnson's (2014) 120-item IPIP NEO-PI-R</i>.`,
+inventory is from <i>Johnson's (2014) 120-item IPIP NEO-PI-R</i>. Scores are raw self-report summaries, not clinical diagnoses or normed selection assessments.`,
       info: 'The following test contains 120 questions which is estimated to take you about 10 minutes to complete.',
       result:
         'After you have completed the test you will receive a detailed personality report in the following domains:',

@@ -39,7 +39,7 @@ export const GetResultPage = ({
 
   const handleGetResults = () => {
     if (!formatAndValidateId(id)) return;
-    router.push(`/result/${formatId(id)}`);
+    router.push(`/result?id=${formatId(id)}`);
   };
 
   return (
@@ -67,7 +67,7 @@ export const GetResultPage = ({
               buttonStyles({ color: 'danger', size: 'lg' }),
               'w-full md:w-auto'
             )}
-            href={`/result/${previousResultId}`}
+            href={`/result?id=${previousResultId}`}
           >
             {viewPreviousText}
           </Link>

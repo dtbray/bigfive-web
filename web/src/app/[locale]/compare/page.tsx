@@ -1,18 +1,13 @@
 import { title } from '@/components/primitives';
 import { useTranslations } from 'next-intl';
-import { ComparePeople } from './compare-people';
 import { unstable_setRequestLocale } from 'next-intl/server';
-import { Suspense } from 'react';
+import { Alert } from '@/components/alert';
 
 interface Props {
   params: { locale: string };
-  searchParams: { id: string };
 }
 
-export default function ComparePage({
-  params: { locale },
-  searchParams: { id }
-}: Props) {
+export default function ComparePage({ params: { locale } }: Props) {
   unstable_setRequestLocale(locale);
   const t = useTranslations('getCompare');
   return (
@@ -21,13 +16,14 @@ export default function ComparePage({
       <br />
       <br />
       <span className='mt-2'>{t('description1')}</span>
-      <Suspense fallback='loading...'>
-        <ComparePeople
-          addPersonText={t('addPerson')}
-          comparePeopleText={t('comparePeople')}
-          paramId={id}
-        />
-      </Suspense>
+      <div className='mt-8'>
+        <Alert title='Compare is paused for static hosting'>
+          <p>
+            The original comparison feature required server-side stored results.
+            This GitHub Pages build stores results locally in your browser.
+          </p>
+        </Alert>
+      </div>
     </div>
   );
 }

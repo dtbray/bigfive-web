@@ -1,66 +1,46 @@
 # bigfive-web
 
-https://bigfive-test.com
+Static Next.js app for GitHub Pages.
 
-Website for five factor model of personality based on work from [IPIP-NEO-PI](https://github.com/kholia/IPIP-NEO-PI).
+Website for the five-factor model of personality based on Johnson's public-domain 120-item IPIP-NEO item set.
 
-Tests and evaluation is gathered from [ipip.ori.org](http://ipip.ori.org).
+Items and interpretive text are gathered from [ipip.ori.org](http://ipip.ori.org).
 
-See it live @ [bigfive-test.com](https://bigfive-test.com)
+Scores are raw self-report summaries for self-reflection. They are not clinical diagnoses, employment assessments, or demographically normed percentile scores.
 
 The frontend is written in [nodejs](https://nodejs.org) using the
 [Next.js](https://nextjs.org/) framework.
 
 ## Installation
 
-Download and install [nodejs](https://nodejs.org),
-[git](https://git-scm.com/downloads) and [vercel-cli](https://vercel.com/download)
-
-Install [yarn](https://classic.yarnpkg.com/lang/en/docs/install/#debian-stable)
-
-```
-npm install --global yarn
-```
-
-Install docker and docker-compose
-
-The results are saved to a [mongodb](https://www.mongodb.com/) database, so for a full test you either need a running mongodb or an instance at [mlab](https://mlab.com/)
+Download and install [Node.js](https://nodejs.org), [git](https://git-scm.com/downloads), and [pnpm](https://pnpm.io/).
 
 ## Development
 
-add .env.local file
+Install dependencies:
 
-```
-NEXT_PUBLIC_ENV=development
-DB_URL=mongodb://root:example@localhost:27017
-DB_NAME=b5
-DB_COLLECTION=results
+```sh
+pnpm install
 ```
 
-Run the setup script to install all dependencies
+Run the development server:
 
-```
-yarn
-```
-
-Start mongodb server
-
-```
-docker-compose up -d
+```sh
+pnpm dev
 ```
 
-Run the development server
+Build the static site:
 
-```
-yarn dev
+```sh
+pnpm build
 ```
 
 ## Linting
 
 Run the linter
 
-```
-yarn lint && yarn format:fix
+```sh
+pnpm lint && pnpm format:fix
 ```
 
 ## License

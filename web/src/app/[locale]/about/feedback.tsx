@@ -3,20 +3,13 @@
 import { useMemo, useState } from 'react';
 import { Input, Textarea } from '@nextui-org/input';
 import { Button } from '@nextui-org/button';
-import { FeebackState, saveFeedback } from '@/actions';
-import { useFormState, useFormStatus } from 'react-dom';
 import { Chip } from '@nextui-org/react';
 
 export default function Feedback() {
-  const { pending } = useFormStatus();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
-
-  const [state, formAction] = useFormState(saveFeedback, {
-    message: '',
-    type: 'success'
-  } as FeebackState);
+  const [sent, setSent] = useState(false);
 
   const validateEmail = (value: string) =>
     value.match(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+.[A-Z]{2,4}$/i);
@@ -33,8 +26,14 @@ export default function Feedback() {
     return false;
   }, [email, name, message, isInvalidEmail]);
 
+  function submitFeedback() {
+    const body = encodeURIComponent(`${message}\n\nFrom: ${name} <${email}>`);
+    window.location.href = `mailto:bigfive-test@rubynor.com?subject=Big Five feedback&body=${body}`;
+    setSent(true);
+  }
+
   return (
-    <form action={formAction}>
+    <form onSubmit={(event) => event.preventDefault()}>
       <div className='flex gap-4 mt-10'>
         <div className='w-1/2'>
           <Input
@@ -74,20 +73,16 @@ export default function Feedback() {
       <Button
         color='primary'
         className='mt-4'
-        isLoading={pending}
-        type='submit'
+        type='button'
         isDisabled={isInvalidForm}
+        onPress={submitFeedback}
       >
         Submit
       </Button>
-      {state.message && (
+      {sent && (
         <div className='mt-4'>
-          <Chip
-            className='mt-4'
-            color={state.type === 'success' ? 'success' : 'danger'}
-            size='lg'
-          >
-            <p>{state.message}</p>
+          <Chip className='mt-4' color='success' size='lg'>
+            <p>Your email app should open with the feedback message.</p>
           </Chip>
         </div>
       )}
