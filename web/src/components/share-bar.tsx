@@ -7,7 +7,7 @@ import type { Report } from '@/types/report';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
 
 interface ShareBarProps {
-  report: Report;
+  report: Pick<Report, 'id'>;
 }
 
 export default function ShareBar({ report }: ShareBarProps) {

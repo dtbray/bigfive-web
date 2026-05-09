@@ -23,7 +23,6 @@ export function ResultPageClient({ fallback, labels }: ResultPageClientProps) {
   return (
     <ResultsClient
       id={id.substring(0, 24)}
-      language={searchParams.get('lang') || undefined}
       showExpanded={searchParams.get('showExpanded') === 'true'}
       labels={labels}
     />

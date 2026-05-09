@@ -1,7 +1,5 @@
 'use client';
 
-import LocaleSwitcher from '@/components/locale-switcher';
-import LocaleSwitcherFull from '@/components/locale-switcher-full';
 import { siteConfig } from '@/config/site';
 import clsx from 'clsx';
 import { ThemeSwitch } from '@/components/theme-switch';
@@ -66,11 +64,9 @@ export const Navbar = ({ navItems, navMenuItems, locale }: NavbarProps) => {
             <GithubIcon className='text-default-500' />
           </a>
           <ThemeSwitch />
-          <LocaleSwitcherFull locale={locale} />
         </div>
 
         <div className='flex items-center gap-3 md:hidden'>
-          <LocaleSwitcher locale={locale} />
           <a
             href={siteConfig.links.github}
             aria-label='Github'
