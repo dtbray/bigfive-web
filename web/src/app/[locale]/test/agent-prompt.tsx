@@ -20,22 +20,36 @@ Only answer from evidence you actually have about me. If you are unsure, choose 
 
 Return JSON in this shape:
 {
-  "resultUrl": "https://blog.thomas-bray.com/bigfive-web/en/result/#answers=333...",
+  "resultUrl": "https://blog.thomas-bray.com/bigfive-web/en/result/#a=...",
   "answers": [
     { "number": 1, "choice": "Neither Accurate Nor Inaccurate" }
   ],
   "commentary": "Briefly explain the results in the context of our co-work."
 }
 
-Build resultUrl by appending one score digit for each answer, in question order, to:
-https://blog.thomas-bray.com/bigfive-web/en/result/#answers=
+Build resultUrl by packing each selected choice's numeric score into this compact token:
+function packScores(scores) {
+  const bytes = new Uint8Array(Math.ceil(scores.length * 3 / 8));
+  scores.forEach((score, index) => {
+    const value = score - 1;
+    const bitOffset = index * 3;
+    const byteIndex = Math.floor(bitOffset / 8);
+    const bitIndex = bitOffset % 8;
+    bytes[byteIndex] |= value << bitIndex;
+    if (bitIndex > 5) bytes[byteIndex + 1] |= value >> (8 - bitIndex);
+  });
+  return btoa(String.fromCharCode(...bytes)).replace(/\\+/g, '-').replace(/\\//g, '_').replace(/=+$/, '');
+}
 
-Use each selected choice's numeric score from the test input JSON. The finished URL should have exactly 120 digits after #answers=. If you can run code, score the answers using the question choice scores in the JSON. If not, return the completed answers and summarize the likely Big Five profile.`;
+Append that token to:
+https://blog.thomas-bray.com/bigfive-web/en/result/#a=
+
+Use each selected choice's numeric score from the test input JSON. If you cannot run code, return the completed answers JSON and summarize the likely Big Five profile.`;
 
 const agentInstructions = [
   'Use the machine-readable JSON: https://blog.thomas-bray.com/bigfive-web/big-five-agent-input.json.',
   'Return one allowed choice label for every numbered question.',
-  'Prefer returning a resultUrl with #answers= followed by 120 score digits from the selected choices.',
+  'Prefer returning a resultUrl with #a= followed by the packed score token.',
   'If code execution is available, compute scores from the choice scores in the JSON.',
   'The returned JSON can still be pasted into the result page as a fallback.',
   'If using the web form instead, open https://blog.thomas-bray.com/bigfive-web/en/test/.',

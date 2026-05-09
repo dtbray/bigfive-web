@@ -53,10 +53,13 @@ export const GetResultPage = ({
 
   useEffect(() => {
     const hash = new URLSearchParams(window.location.hash.slice(1));
+    const packedAnswers = hash.get('a');
     const compactAnswers = hash.get('answers');
-    if (!compactAnswers) return;
+    if (!packedAnswers && !compactAnswers) return;
 
-    const answers = buildAnswersFromCompactScores(compactAnswers);
+    const answers = packedAnswers
+      ? buildAnswersFromPackedScores(packedAnswers)
+      : buildAnswersFromCompactScores(compactAnswers || '');
     if (typeof answers === 'string') {
       setAgentJsonError(answers);
       return;
@@ -129,12 +132,47 @@ export const GetResultPage = ({
       return `Expected #answers= followed by ${compactAnswerLength} digits from 1 to 5.`;
     }
 
-    return questions.map((question, index) => {
-      const score = Number(scores[index]);
+    return buildAnswersFromScores(scores.split('').map(Number));
+  };
 
+  const buildAnswersFromPackedScores = (packedScores: string) => {
+    let bytes: Uint8Array;
+
+    try {
+      bytes = base64UrlToBytes(packedScores.trim());
+    } catch {
+      return 'Expected #a= followed by URL-safe packed answer data.';
+    }
+
+    const scores: number[] = [];
+    for (
+      let bitOffset = 0;
+      scores.length < compactAnswerLength;
+      bitOffset += 3
+    ) {
+      const byteIndex = Math.floor(bitOffset / 8);
+      const bitIndex = bitOffset % 8;
+      const value =
+        (((bytes[byteIndex] || 0) >> bitIndex) |
+          ((bytes[byteIndex + 1] || 0) << (8 - bitIndex))) &
+        7;
+      const score = value + 1;
+
+      if (score < 1 || score > 5) {
+        return `Packed answer ${scores.length + 1} has an invalid score.`;
+      }
+
+      scores.push(score);
+    }
+
+    return buildAnswersFromScores(scores);
+  };
+
+  const buildAnswersFromScores = (scores: number[]) => {
+    return questions.map((question, index) => {
       return {
         id: question.id,
-        score,
+        score: scores[index],
         domain: question.domain,
         facet: question.facet
       };
@@ -178,6 +216,15 @@ export const GetResultPage = ({
     return Array.from(bytes, (byte) => byte.toString(16).padStart(2, '0')).join(
       ''
     );
+  }
+
+  function base64UrlToBytes(value: string) {
+    const base64 = value
+      .replace(/-/g, '+')
+      .replace(/_/g, '/')
+      .padEnd(Math.ceil(value.length / 4) * 4, '=');
+    const binary = atob(base64);
+    return Uint8Array.from(binary, (char) => char.charCodeAt(0));
   }
 
   return (
